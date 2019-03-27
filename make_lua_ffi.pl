@@ -41,6 +41,10 @@ my @keywords = qw(
 	until
 );
 
+my @c11_keywords_ignored = qw(
+	_Noreturn
+);
+
 my @ignores = qw(
 	__typeof__
 	__BEGIN_DECLS
@@ -65,6 +69,9 @@ sub replace_keywords {
 			$$output .= "/* Replacing $keyword with ${keyword}_ */\n";
 			$line =~ s/\b$keyword\b/${keyword}_/g;
 		}
+	}
+	foreach my $keyword (@c11_keywords_ignored) {
+		$line =~ s/\b$keyword\b/\/* ${keyword} *\//g;
 	}
 	return $line;
 }
